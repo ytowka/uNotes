@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.ytowka.unotes.view.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/onLoginNavigate"
+            app:destination="@id/roomsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:launchSingleTop="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/roomsFragment"
+        android:name="com.ytowka.unotes.view.RoomsFragment"
+        android:label="fragment_rooms"
+        tools:layout="@layout/fragment_rooms" >
+        <action
+            android:id="@+id/action_roomsFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+</navigation>
