@@ -4,7 +4,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">#5D4037</item>
     </style>
     <style name="RoundedTexLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxCornerRadiusTopStart">50dp</item>
@@ -12,5 +12,4 @@
         <item name="boxCornerRadiusBottomStart">50dp</item>
         <item name="boxCornerRadiusBottomEnd">50dp</item>
     </style>
-
 </resources>

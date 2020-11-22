@@ -1,5 +1,17 @@
 <resources>
     <string name="app_name">uNotes</string>
-    <string name="login">sign in</string>
+    <string name="login">Sign in with Google</string>
     <string name="reg">sign up</string>
+    <string name="login_canceled">sign in canceled</string>
+    <string name="empty_invite_list">you are not invited to any group yet</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="members">members</string>
+    <string name="host">host</string>
+    <string name="authentication">authentication</string>
+    <string name="empty_note_list_massage">you don\'t have any files yet. Create a new one or wait for invitations</string>
+    <string name="updating">Updating...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="search">search</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
 </resources>

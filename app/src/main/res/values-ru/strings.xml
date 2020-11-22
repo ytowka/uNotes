@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">uNotes</string>
-    <string name="login">вход</string>
-    <string name="hello_blank_fragment">ыфва</string>
+    <string name="login">Войти через Google</string>
     <string name="reg">регистрация</string>
+    <string name="login_canceled">вход отменён</string>
+    <string name="empty_invite_list">вы еще не приглашены ни в какие группы</string>
+    <string name="members">участники</string>
+    <string name="host">хост</string>
+    <string name="authentication">авторизация</string>
+    <string name="empty_note_list_massage">у вас еще нет файлов. создайте новый или подождите пока вас приглосят</string>
+    <string name="updating">Обновление...</string>
+    <string name="search">поиск</string>
 </resources>

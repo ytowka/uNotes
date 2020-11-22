@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "86385064596",
+    "firebase_url": "https://unotes-e8984.firebaseio.com",
+    "project_id": "unotes-e8984",
+    "storage_bucket": "unotes-e8984.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:86385064596:android:531cbe597a751b10f7d281",
+        "android_client_info": {
+          "package_name": "com.ytowka.unotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "86385064596-dbg1kruro3mlo2g4867a8jt0toaerrpo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ytowka.unotes",
+            "certificate_hash": "3b212e2fef53aa37fa029b0f7847a966bee54891"
+          }
+        },
+        {
+          "client_id": "86385064596-kiunojf0thlv15pjuadtrhfckf8nhj1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBf6hcVjBmHdkI1pDkW9tWS7w3sshaDiyM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "86385064596-kiunojf0thlv15pjuadtrhfckf8nhj1i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

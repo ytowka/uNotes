@@ -1,0 +1,9 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:drawable="@drawable/google_icon_img"
+        android:width="35dp"
+        android:height="35dp"
+        />
+
+</layer-list >
