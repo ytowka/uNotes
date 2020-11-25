@@ -9,8 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.ytowka.unotes.MainActivity
 import com.ytowka.unotes.R
+import com.ytowka.unotes.databinding.ActivityMainBinding
 import com.ytowka.unotes.databinding.FragmentNoteListBinding
 import com.ytowka.unotes.screens.login.LoginViewModel
 
@@ -39,7 +42,7 @@ class NoteListFragment : Fragment() {
         val isConnected: Boolean = activeNetwork?.isConnected == true
 
         val listAdapter = ListAdapter {
-            viewModel.openNote(it,isConnected)
+            viewModel.openNote(it, isConnected)
         }
 
         binding.recyclerView.apply {
@@ -47,18 +50,18 @@ class NoteListFragment : Fragment() {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         }
         activity?.actionBar?.title = getString(R.string.updating)
-        loginViewModel.firebaseUserLiveData.observe(viewLifecycleOwner){
+        loginViewModel.firebaseUserLiveData.observe(viewLifecycleOwner) {
             viewModel.loadNotes(it)
         }
-        viewModel.notesList.observe(viewLifecycleOwner){
+        viewModel.notesList.observe(viewLifecycleOwner) {
             listAdapter.setup(it)
-
-            if(it.isEmpty()){
+            if (it.isEmpty()) {
                 binding.emptyMassage.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.emptyMassage.visibility = View.GONE
             }
             activity?.actionBar?.title = getString(R.string.app_name)
         }
+
     }
 }

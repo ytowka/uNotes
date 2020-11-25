@@ -10,4 +10,7 @@
     <string name="empty_note_list_massage">у вас еще нет файлов. создайте новый или подождите пока вас приглосят</string>
     <string name="updating">Обновление...</string>
     <string name="search">поиск</string>
+    <string name="invitations">приглашения</string>
+    <string name="update_plan">обновить план</string>
+    <string name="logout">выйти</string>
 </resources>

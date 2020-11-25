@@ -12,6 +12,11 @@
     <string name="updating">Updating...</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="search">search</string>
+    <string name="invitations">invitations</string>
+    <string name="update_plan">update plan</string>
+    <string name="logout">sign out</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
