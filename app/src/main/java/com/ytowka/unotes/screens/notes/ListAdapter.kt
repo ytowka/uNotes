@@ -17,8 +17,8 @@ class ListAdapter(val onOpen: (Note) -> Unit) : RecyclerView.Adapter<ListAdapter
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return NoteViewHolder(inflater.inflate(R.layout.list_item_note,parent))
+        val binding =  ListItemNoteBinding.inflate(LayoutInflater.from(parent.context))
+        return NoteViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
@@ -28,8 +28,7 @@ class ListAdapter(val onOpen: (Note) -> Unit) : RecyclerView.Adapter<ListAdapter
     override fun getItemCount(): Int {
         return list.size
     }
-    inner class NoteViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        private val binding = ListItemNoteBinding.bind(view)
+    inner class NoteViewHolder(val binding: ListItemNoteBinding) : RecyclerView.ViewHolder(binding.root){
         private var note = Note()
 
         init {
@@ -39,7 +38,8 @@ class ListAdapter(val onOpen: (Note) -> Unit) : RecyclerView.Adapter<ListAdapter
         }
         fun bind(note: Note){
             this.note = note
-            binding.noteText
+            binding.noteText.text = note.name
+            binding.editedTimeText.text = note.editDateText
         }
     }
 }

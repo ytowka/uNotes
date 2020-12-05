@@ -13,4 +13,5 @@
     <string name="invitations">приглашения</string>
     <string name="update_plan">обновить план</string>
     <string name="logout">выйти</string>
+    <string name="list">список</string>
 </resources>

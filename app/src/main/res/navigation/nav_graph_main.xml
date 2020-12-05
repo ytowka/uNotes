@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -12,28 +12,37 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/login_action"
-            app:destination="@id/noteListFragment"
+            app:destination="@id/menu_list"
 
-            app:popUpTo='@id/loginFragment'
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+
+            app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/noteListFragment"
+        android:id="@+id/menu_list"
         android:name="com.ytowka.unotes.screens.notes.NoteListFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_note_list" >
         <action
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+
             android:id="@+id/edit_note"
             app:destination="@id/editFragment" />
         <action
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+
             android:id="@+id/overview_note"
             app:destination="@id/overviewFragment" />
-        <action
-            android:id="@+id/logout"
-            app:destination="@id/loginFragment"
-
-            app:popUpTo='@id/noteListFragment'
-            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/editFragment"
@@ -46,13 +55,54 @@
         android:label="fragment_overview"
         tools:layout="@layout/fragment_overview" />
     <fragment
-        android:id="@+id/updatePlanFragment"
+        android:id="@+id/menu_update_plan"
         android:name="com.ytowka.unotes.screens.updateplan.UpdatePlanFragment"
         android:label="@string/update_plan"
         tools:layout="@layout/fragment_update_plan" />
     <fragment
-        android:id="@+id/invitesFragment"
+        android:id="@+id/menu_invites_fragment"
         android:name="com.ytowka.unotes.screens.invites.InvitesFragment"
         android:label="@string/invitations"
         tools:layout="@layout/fragment_invites" />
+    <action
+        android:id="@+id/menu_logout"
+        app:destination="@id/loginFragment"
+
+        app:enterAnim="@android:anim/slide_in_left"
+        app:exitAnim="@android:anim/slide_out_right"
+        app:popEnterAnim="@android:anim/slide_in_left"
+        app:popExitAnim="@android:anim/slide_out_right"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="true" />
+    <action
+        android:id="@+id/action_to_invites"
+        app:destination="@id/menu_invites_fragment"
+        app:popUpTo="@id/menu_list"
+        app:popUpToInclusive="false" />
+    <action
+        android:id="@+id/action_to_update_plane"
+        app:destination="@id/menu_update_plan"
+        app:popUpTo="@id/menu_list"
+        app:popUpToInclusive="false" />
+    <action
+        android:id="@+id/action_to_list"
+        app:destination="@id/menu_list"
+        app:popUpTo="@id/menu_list"
+        app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.ytowka.unotes.screens.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_if_logined"
+            app:destination="@id/menu_list"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_if_not_logined"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
