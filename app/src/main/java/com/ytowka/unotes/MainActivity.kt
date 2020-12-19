@@ -16,20 +16,21 @@ import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import com.ytowka.unotes.databinding.DrawerHeadBinding
 import com.ytowka.unotes.model.CircularTransformation
-import com.ytowka.unotes.screens.login.MainViewModel
-import com.ytowka.unotes.screens.login.MainViewModelFactory
+import com.ytowka.unotes.screens.MainViewModel
+import com.ytowka.unotes.screens.MainViewModelFactory
 
 
 class MainActivity : AppCompatActivity() {
     companion object{
         const val ICON_RADIUS = 45
     }
-
     lateinit var mainViewModel: MainViewModel;
     lateinit var navController: NavController
 
     lateinit var navigationView: NavigationView
     lateinit var  navigationViewHeadBinding: DrawerHeadBinding
+
+    lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,14 +46,14 @@ class MainActivity : AppCompatActivity() {
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.menu_list), drawer)
 
-        mainViewModel.firebaseUserLiveData.observe(this){
+        mainViewModel.authentication.firebaseUserLiveData.observe(this){
             //Log.i("debug", "observes in main activity");
             if(it != null){
                 setupUser(it.photoUrl!!, it.displayName!!)
             }
         }
 
-        val toolbar =  findViewById<Toolbar>(R.id.toolbar)
+        toolbar =  findViewById(R.id.toolbar)
         toolbar.setupWithNavController(
             navController,
             appBarConfiguration
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         navigationView.setNavigationItemSelectedListener { item ->
             when(item.itemId){
                 R.id.menu_logout -> {
-                    mainViewModel.logout()
+                    mainViewModel.authentication.logout()
                     val action = NavGraphDirections.menuLogout()
                     navController.navigate(action)
                 }

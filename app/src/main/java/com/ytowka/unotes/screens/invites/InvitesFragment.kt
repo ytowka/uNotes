@@ -7,19 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.ytowka.unotes.databinding.FragmentInvitesBinding
+import com.ytowka.unotes.screens.MainViewModel
+import com.ytowka.unotes.screens.MainViewModelFactory
 
 
 class InvitesFragment : Fragment() {
 
     lateinit var viewModel: InvitesViewModel
+    lateinit var mainViewModel: MainViewModel
     lateinit var binding: FragmentInvitesBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentInvitesBinding.inflate(inflater)
         viewModel = ViewModelProvider(this).get(InvitesViewModel::class.java)
+        mainViewModel = ViewModelProvider(requireActivity(),
+            MainViewModelFactory(requireActivity().application)
+        ).get(MainViewModel::class.java)
         return binding.root
     }
 

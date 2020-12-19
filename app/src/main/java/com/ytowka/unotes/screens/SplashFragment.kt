@@ -9,8 +9,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.ytowka.unotes.R
-import com.ytowka.unotes.screens.login.MainViewModel
-import com.ytowka.unotes.screens.login.MainViewModelFactory
 
 class SplashFragment : Fragment() {
     override fun onCreateView(
@@ -18,7 +16,8 @@ class SplashFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        ViewModelProvider(this,MainViewModelFactory(requireActivity().application)).get(MainViewModel::class.java).firebaseUserLiveData.observe(viewLifecycleOwner){
+        ViewModelProvider(requireActivity(), MainViewModelFactory(requireActivity().application)).get(
+            MainViewModel::class.java).authentication.firebaseUserLiveData.observe(viewLifecycleOwner){
             Log.i("debug","data have got")
             val action = if(it != null) SplashFragmentDirections.actionIfLogined() else SplashFragmentDirections.actionIfNotLogined()
             findNavController().navigate(action)

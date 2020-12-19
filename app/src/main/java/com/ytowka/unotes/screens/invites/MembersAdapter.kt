@@ -6,12 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ytowka.unotes.R
 import com.ytowka.unotes.databinding.ItemListMembersOfInviteBinding
-import com.ytowka.unotes.model.Member
+import com.ytowka.unotes.model.Person
 
 class MembersAdapter : RecyclerView.Adapter<MembersAdapter.MemberViewHolder>(){
-    private var list = emptyList<Member>()
-
-    fun setup(list: List<Member>){
+    private var list = emptyList<Person>()
+    fun setup(list: List<Person>){
         this.list = list
         notifyDataSetChanged()
     }
@@ -22,7 +21,7 @@ class MembersAdapter : RecyclerView.Adapter<MembersAdapter.MemberViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: MemberViewHolder, position: Int) {
-
+        holder.bind(list[position])
     }
 
     override fun getItemCount(): Int {
@@ -32,7 +31,7 @@ class MembersAdapter : RecyclerView.Adapter<MembersAdapter.MemberViewHolder>(){
     inner class MemberViewHolder(view: View) : RecyclerView.ViewHolder(view){
         private val binding = ItemListMembersOfInviteBinding.bind(view)
 
-        fun bind(member: Member){
+        fun bind(member: Person){
             binding.textIsHost.visibility = if(member.isHost) View.VISIBLE else View.GONE
             binding.textMemberName.text = member.name
         }

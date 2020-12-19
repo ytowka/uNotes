@@ -1,7 +1,6 @@
 package com.ytowka.unotes.screens.login
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,8 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.ytowka.unotes.MainActivity
 import com.ytowka.unotes.databinding.FragmentLoginBinding
+import com.ytowka.unotes.screens.MainViewModel
+import com.ytowka.unotes.screens.MainViewModelFactory
 
 
 class LoginFragment : Fragment() {
@@ -27,7 +27,9 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater)
-        viewModel = ViewModelProvider(requireActivity(),MainViewModelFactory(requireActivity().application)).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity(),
+            MainViewModelFactory(requireActivity().application)
+        ).get(MainViewModel::class.java)
         return binding.root
     }
 
@@ -36,7 +38,7 @@ class LoginFragment : Fragment() {
 
         Log.i("debug","current destination: авторизация")
 
-        viewModel.firebaseUserLiveData.observe(viewLifecycleOwner){
+        viewModel.authentication.firebaseUserLiveData.observe(viewLifecycleOwner){
             if(it != null){
                 val action = LoginFragmentDirections.loginAction()
                 findNavController().navigate(action)
@@ -44,14 +46,14 @@ class LoginFragment : Fragment() {
 
         }
         binding.loginFragmentLogBtn.setOnClickListener {
-            val signInIntent = viewModel.mGoogleSignInClient.signInIntent
+            val signInIntent = viewModel.authentication.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
-            viewModel.postResult(data)
+            viewModel.authentication.postResult(data)
         }
     }
 

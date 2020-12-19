@@ -52,7 +52,7 @@ class PagerAdapter(val onInteract: (ActionType,Invitation) -> Unit) : RecyclerVi
             val adapter = MembersAdapter()
             binding.listMembers.adapter = adapter
             binding.listMembers.layoutManager = LinearLayoutManager(binding.root.context)
-            adapter.setup(invitation.members)
+            adapter.setup(invitation.membersIds)
         }
     }
 
