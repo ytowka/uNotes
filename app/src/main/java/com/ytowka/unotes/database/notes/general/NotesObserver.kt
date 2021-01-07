@@ -1,4 +1,4 @@
-package com.ytowka.unotes.model.network
+package com.ytowka.unotes.database.notes.general
 
 import com.ytowka.unotes.model.Note
 

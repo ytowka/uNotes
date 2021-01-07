@@ -46,24 +46,27 @@
     </fragment>
     <fragment
         android:id="@+id/editFragment"
-        android:name="com.ytowka.unotes.screens.edit.EditFragment"
+        android:name="com.ytowka.unotes.screens.edit.editor.EditFragment"
         android:label="fragment_edit"
-        tools:layout="@layout/fragment_edit" />
+        tools:layout="@layout/fragment_edit" >
+        <argument
+            android:name="noteId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/overviewFragment"
-        android:name="com.ytowka.unotes.screens.edit.OverviewFragment"
+        android:name="com.ytowka.unotes.screens.edit.overview.OverviewFragment"
         android:label="fragment_overview"
-        tools:layout="@layout/fragment_overview" />
+        tools:layout="@layout/fragment_overview" >
+        <argument
+            android:name="noteId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/menu_update_plan"
         android:name="com.ytowka.unotes.screens.updateplan.UpdatePlanFragment"
         android:label="@string/update_plan"
         tools:layout="@layout/fragment_update_plan" />
-    <fragment
-        android:id="@+id/menu_invites_fragment"
-        android:name="com.ytowka.unotes.screens.invites.InvitesFragment"
-        android:label="@string/invitations"
-        tools:layout="@layout/fragment_invites" />
     <action
         android:id="@+id/menu_logout"
         app:destination="@id/loginFragment"
@@ -74,11 +77,6 @@
         app:popExitAnim="@android:anim/slide_out_right"
         app:popUpTo="@id/nav_graph"
         app:popUpToInclusive="true" />
-    <action
-        android:id="@+id/action_to_invites"
-        app:destination="@id/menu_invites_fragment"
-        app:popUpTo="@id/menu_list"
-        app:popUpToInclusive="false" />
     <action
         android:id="@+id/action_to_update_plane"
         app:destination="@id/menu_update_plan"
@@ -104,5 +102,18 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/inviteFragment"
+        android:name="com.ytowka.unotes.screens.invite.InviteFragment"
+        android:label="@string/invitations"
+        tools:layout="@layout/fragment_invite">
+        <argument
+            android:name="inviteId"
+            app:argType="string" />
+        <deepLink
+            android:id="@+id/deepLink"
+            android:autoVerify="true"
+            app:uri="https://ytowka.unotes.com/{inviteId}" />
     </fragment>
 </navigation>

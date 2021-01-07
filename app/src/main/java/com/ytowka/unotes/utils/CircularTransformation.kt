@@ -1,4 +1,4 @@
-package com.ytowka.unotes.model
+package com.ytowka.unotes.utils
 
 import android.graphics.*
 import com.squareup.picasso.Transformation

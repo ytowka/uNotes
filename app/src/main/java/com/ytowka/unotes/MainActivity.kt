@@ -2,7 +2,6 @@ package com.ytowka.unotes
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -15,7 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import com.ytowka.unotes.databinding.DrawerHeadBinding
-import com.ytowka.unotes.model.CircularTransformation
+import com.ytowka.unotes.utils.CircularTransformation
 import com.ytowka.unotes.screens.MainViewModel
 import com.ytowka.unotes.screens.MainViewModelFactory
 
@@ -62,20 +61,12 @@ class MainActivity : AppCompatActivity() {
         navigationViewHeadBinding = DrawerHeadBinding.bind(navigationView.getHeaderView(0))
 
 
-        //navigationView.setupWithNavController()
-
         navigationView.setNavigationItemSelectedListener { item ->
             when(item.itemId){
                 R.id.menu_logout -> {
                     mainViewModel.authentication.logout()
                     val action = NavGraphDirections.menuLogout()
                     navController.navigate(action)
-                }
-                R.id.menu_invites_fragment -> {
-                    if(navController.currentDestination?.id != R.id.menu_invites_fragment){
-                        val action = NavGraphDirections.actionToInvites()
-                        navController.navigate(action)
-                    }
                 }
                 R.id.menu_list -> {
                     if(navController.currentDestination?.id != R.id.menu_list){
@@ -97,23 +88,17 @@ class MainActivity : AppCompatActivity() {
 
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            Log.i("debug","changed destination: ${destination.label}")
-            if(destination.id == R.id.loginFragment || destination.id == R.id.splashFragment){
+            if(destination.id == R.id.loginFragment || destination.id == R.id.splashFragment || destination.id == R.id.editFragment || destination.id == R.id.overviewFragment){
                 toolbar.visibility = View.GONE
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
             else{
-                /*if(destination.id == R.id.noteListFragment){
-                    navController.popBackStack()
-                }*/
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                 toolbar.visibility = View.VISIBLE
             }
         }
     }
     private fun setupUser(photoUri: Uri, name: String){
-        Log.i("debug", "setting up user in drawer")
-
         navigationViewHeadBinding.drawerUsername.text = name
 
         Picasso.get()

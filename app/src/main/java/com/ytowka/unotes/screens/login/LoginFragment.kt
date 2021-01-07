@@ -25,11 +25,10 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentLoginBinding.inflate(inflater)
-        viewModel = ViewModelProvider(requireActivity(),
-            MainViewModelFactory(requireActivity().application)
-        ).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity(), MainViewModelFactory(requireActivity().application))
+            .get(MainViewModel::class.java)
         return binding.root
     }
 
@@ -53,7 +52,7 @@ class LoginFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
-            viewModel.authentication.postResult(data)
+            viewModel.authentication.postIntentResult(data)
         }
     }
 

@@ -1,15 +1,14 @@
 package com.ytowka.unotes.screens.notes
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ytowka.unotes.R
 import com.ytowka.unotes.databinding.ListItemNoteBinding
 import com.ytowka.unotes.model.Note
-import com.ytowka.unotes.model.network.NotesObserver
+import com.ytowka.unotes.database.notes.general.NotesObserver
 
-class ListAdapter(val onOpen: (Note) -> Unit) : RecyclerView.Adapter<ListAdapter.NoteViewHolder>(), NotesObserver{
+class ListAdapter(val onOpen: (Note) -> Unit) : RecyclerView.Adapter<ListAdapter.NoteViewHolder>(),
+    NotesObserver {
     private var list = mutableListOf<Note>()
 
     fun setup(list: List<Note>){

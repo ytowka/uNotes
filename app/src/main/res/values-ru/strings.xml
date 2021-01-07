@@ -14,4 +14,10 @@
     <string name="update_plan">обновить план</string>
     <string name="logout">выйти</string>
     <string name="list">список</string>
+    <string name="already_joined">"вы уже присоединились "</string>
+    <string name="expired">срок годности приглошения истёк</string>
+    <string name="invite_not_exists">приглашение которре вы хотите посмотреть не сушествует или уже неактивно</string>
+    <string name="heading">заголовок</string>
+    <string name="editing">редактирование</string>
+    <string name="i_icon">control panel</string>
 </resources>

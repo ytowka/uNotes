@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.ytowka.unotes.R
+import com.ytowka.unotes.SplashFragmentDirections
 
 class SplashFragment : Fragment() {
     override fun onCreateView(

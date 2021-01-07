@@ -16,8 +16,15 @@
     <string name="update_plan">update plan</string>
     <string name="logout">sign out</string>
     <string name="list">list</string>
+    <string name="already_joined">you already joined this note</string>
+    <string name="expired">the invite you are seeing is expired</string>
+    <string name="invite_not_exists">the invitation you want to watch does not exist or is no longer active</string>
+    <string name="heading">heading</string>
+    <string name="editing">editing</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="i_icon">control panel</string>
+    <!-- TODO: Remove or change this placeholder text -->
     <!-- TODO: Remove or change this placeholder text -->
     <!-- TODO: Remove or change this placeholder text -->
     <!-- TODO: Remove or change this placeholder text -->

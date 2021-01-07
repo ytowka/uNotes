@@ -7,11 +7,6 @@
         android:title="@string/list"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/menu_invites_fragment"
-        android:icon="@drawable/ic_invitation"
-        android:title="@string/invitations"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/menu_update_plan"
         android:icon="@drawable/ic_upgrade"
         android:title="@string/update_plan"

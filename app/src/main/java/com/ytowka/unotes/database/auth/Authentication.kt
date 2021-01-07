@@ -1,4 +1,4 @@
-package com.ytowka.unotes.model.network
+package com.ytowka.unotes.database.auth
 
 import android.app.Application
 import android.content.Intent
@@ -12,15 +12,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.ytowka.unotes.R
-import com.ytowka.unotes.screens.login.LoginFragment
 
-class Authentication(val app: Application) {
+class Authentication(val app: Application): AuthApi {
 
     private var auth: FirebaseAuth
     private var mGoogleSignInClient: GoogleSignInClient
-    val signInIntent get() = mGoogleSignInClient.signInIntent
-    private var userData = MutableLiveData<FirebaseUser>()
-    val firebaseUserLiveData get() = userData
+    override val signInIntent get() = mGoogleSignInClient.signInIntent
+    private var userData = MutableLiveData<FirebaseUser?>()
+    override val firebaseUserLiveData get() = userData
+    override var isLogged = false
 
     init {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -35,11 +35,12 @@ class Authentication(val app: Application) {
         val firebaseAuthUser = auth.currentUser
 
         if (firebaseAuthUser != null) {
-            onUserLogined(firebaseAuthUser)
             userData.value = firebaseAuthUser
+            isLogged = true
         } else if (account != null) {
             firebaseAuthWithGoogle(account.idToken!!)
         } else {
+            isLogged = false
             userData.value = null
         }
     }
@@ -51,13 +52,13 @@ class Authentication(val app: Application) {
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     userData.value = user
-                    onUserLogined(user!!)
+                    isLogged = true
                 } else {
                     Toast.makeText(app, "failed to login", Toast.LENGTH_LONG).show()
                 }
             }
     }
-    fun postResult(data: Intent?) {
+    override fun postIntentResult(data: Intent?) {
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
 
         try {
@@ -71,11 +72,8 @@ class Authentication(val app: Application) {
             }
         }
     }
-
-    private fun onUserLogined(user: FirebaseUser) {
-
-    }
-    fun logout(){
+    override fun logout(){
+        isLogged = false
         userData.value = null
         FirebaseAuth.getInstance().signOut()
         mGoogleSignInClient.signOut()
