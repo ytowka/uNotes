@@ -40,6 +40,7 @@ class NoteListFragment : Fragment() {
         (requireActivity() as MainActivity).toolbar.title = getString(R.string.updating)
 
         val isConnected = NetworkUtil.getConnectivityStatus(requireContext()) != NetworkUtil.TYPE_NOT_CONNECTED
+        mainViewModel.internetConnection.value = isConnected
 
         val listAdapter = ListAdapter {
             val bundle = Bundle()
@@ -52,17 +53,14 @@ class NoteListFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
-        val noteList = mutableListOf<Note>()
-        mainViewModel.database.notes.forEach{ (_, note) ->
-            noteList.add(note)
+        mainViewModel.database.notesLD.observe(viewLifecycleOwner){
+            listAdapter.setup(it)
         }
-        listAdapter.setup(noteList)
         binding.recyclerView.apply {
             adapter = listAdapter
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         }
         activity?.actionBar?.title = getString(R.string.updating)
-        mainViewModel.database.observeNotes(viewLifecycleOwner,listAdapter)
         binding.fabAdd.visibility = if(isConnected) View.VISIBLE else View.GONE
         binding.fabAdd.setOnClickListener {
             if(isConnected){
@@ -74,7 +72,7 @@ class NoteListFragment : Fragment() {
             }
         }
         mainViewModel.database.isLoaded.observe(viewLifecycleOwner,{
-            (requireActivity() as MainActivity).toolbar.title = if(it) getString(R.string.app_name) else getString(R.string.updating)
+            (requireActivity() as MainActivity).toolbar.title = if(it.remoteStatus) getString(R.string.app_name) else getString(R.string.updating)
         })
     }
 }

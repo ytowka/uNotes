@@ -9,14 +9,18 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.ytowka.unotes.database.local.LocalDatabase
 import com.ytowka.unotes.database.notes.editor.EditingApi
 import com.ytowka.unotes.database.notes.editor.Editor
 import com.ytowka.unotes.model.invites.Invite
 import com.ytowka.unotes.model.Member
 import com.ytowka.unotes.model.Note
 import com.ytowka.unotes.model.invites.InviteResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class DBAccessor(val user: FirebaseUser) : DBApi {
+class DBAccessor(val user: FirebaseUser,val localDatabase: LocalDatabase) : DBApi {
     companion object {
         const val baseUrl = "https://ytowka.unotes.com/"
         const val delay = 5000L
@@ -38,29 +42,18 @@ class DBAccessor(val user: FirebaseUser) : DBApi {
 
     private val userNotesDB = mutableMapOf<String, DatabaseReference>()
     private val notesMap = mutableMapOf<String, Note>()
-    override val notes: Map<String, Note> get() = notesMap
-
-    private val noteObserversList = mutableMapOf<LifecycleOwner, NotesObserver>()
-    override fun observeNotes(owner: LifecycleOwner, observer: NotesObserver) {
-        noteObserversList[owner] = observer
-    }
-
-    override fun clearNoteObservers() {
-        noteObserversList.clear()
-    }
-
-
-    private var observingNoteCallback: (Note) -> Unit = {}
-    private var observingNoteId: String = ""
-    private fun onObservingNoteEdited(note: Note) {
-        observingNoteCallback(note)
-    }
+    override val notesLD: MutableLiveData<List<Note>> = MutableLiveData()
 
     override var onErrorAction: (String) -> Unit = {}
 
-    override val isLoaded = MutableLiveData(false)
+    override val isLoaded = MutableLiveData(LoadingStatus(false,false))
 
     init {
+        localDatabase.getNoteDao().getNotes().observeOnce{
+            Log.i("debug","local db loaded")
+            notesLD.postValue(it)
+            isLoaded.postValue(LoadingStatus(true,false))
+        }
         userDB.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.value
@@ -68,83 +61,61 @@ class DBAccessor(val user: FirebaseUser) : DBApi {
                     userDB.child("name").setValue(user.displayName)
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
 
             }
         })
-        userDB.child("noteIds").addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val key = snapshot.value.toString()
-                val dbRef = notesDB.child(key)
-                userNotesDB[key] = dbRef
-                dbRef.addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (!snapshot.exists()) {
-                            Log.i("debug", "note not exists")
-                        }
-                        val note = snapshot.getValue(Note::class.java)
-                        if (note != null) {
-                            if (note.hostMember.userId == user.uid) {
-                                note.isHost = true
-                            }
-                            if (notesMap.containsKey(note.uid)) {
-                                noteObserversList.forEach { (_, observer) ->
-                                    observer.onNoteChanged(notesMap[snapshot.key] ?: Note(), note)
-                                    if (note.uid == observingNoteId && !notesMap[note.uid]!!.textEquals(
-                                            note
-                                        )
-                                    ) {
-                                        onObservingNoteEdited(note)
+        var count: Long
+        userDB.child("noteIds").addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                userNotesDB.clear()
+                notesMap.clear()
+                count = snapshot.childrenCount
+                val list = snapshot.children
+                list.forEach{data->
+                    val value = data.getValue(String::class.java)
+                    value?.let {
+                        userNotesDB[value] = notesDB.child(value)
+                        notesDB.child(value).addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val note = snapshot.getValue(Note::class.java)
+                                if (note != null) {
+                                    if (note.hostMember.userId == user.uid) {
+                                        note.isHost = true
                                     }
+                                    if(isLoaded.value?.remoteStatus == true){
+                                        CoroutineScope(Dispatchers.IO).launch {
+                                            Log.i("debug","local db updated")
+                                            localDatabase.getNoteDao().addNote(note)
+                                        }
+                                    }
+                                    notesMap[snapshot.key!!] = note
+                                } else {
+                                    userDB.child("noteIds").child(value).removeValue()
+                                    onErrorAction("note is broken")
                                 }
-                            } else {
-                                noteObserversList.forEach { (_, observer) ->
-                                    observer.onNoteAdded(note)
-                                }
-                                if (!isLoaded.value!!) {
-                                    isLoaded.postValue(true)
+                                count--
+                                if (count == 0L){
+                                    if(isLoaded.value?.remoteStatus == false){
+                                        CoroutineScope(Dispatchers.IO).launch {
+                                            Log.i("debug","remote db loaded")
+                                            localDatabase.getNoteDao().clear()
+                                            localDatabase.getNoteDao().postNotes(notesMap.values.toList())
+                                        }
+                                    }
+                                    isLoaded.postValue(LoadingStatus(true,true))
+                                    notesLD.postValue(notesMap.values.toList())
                                 }
                             }
-                            notesMap[snapshot.key!!] = note
-                        } else {
-                            userDB.child("noteIds").child(key).removeValue()
-                            onErrorAction("note is broken")
-                        }
+                            override fun onCancelled(error: DatabaseError) {
+
+                            }
+                        })
                     }
-
-                    override fun onCancelled(error: DatabaseError) {
-
-                    }
-                })
-                Log.i("debug", "note added ${snapshot.value.toString()}")
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                Log.i("debug", "note changed ${snapshot.value.toString()}")
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                val key = snapshot.value.toString()
-                if (notesMap.containsKey(key)) {
-                    val note = notesMap[key]!!
-
-                    noteObserversList.forEach { (_, observer) ->
-                        observer.onNoteDeleted(note)
-                    }
-                    userNotesDB.remove(key)
-                    notesMap.remove(key)
-                    Log.i("debug", "note deleted ${snapshot.value.toString()}")
                 }
+                Log.i("debug","")
             }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
@@ -155,7 +126,7 @@ class DBAccessor(val user: FirebaseUser) : DBApi {
         val newNoteChild = notesDB.child(key)
         val newNote = Note(
             key,
-            "note: ${newNoteChild.key}",
+            "",
             hostMember = Member(
                 userDB.key!!,
                 user.displayName.toString(),

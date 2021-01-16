@@ -84,6 +84,7 @@ class Editor(
     }
 
     override fun close() {
+        
         updater.job.cancel()
         getterJob.cancel()
         updater.forceUpdate()

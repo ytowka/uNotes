@@ -1,23 +1,27 @@
 package com.ytowka.unotes.model
 
 import android.net.Uri
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.google.firebase.database.Exclude
 import java.text.DateFormat
 import java.util.*
 
+@Entity(tableName = "Note_table")
 data class Note(
-    var uid: String = "0",
-    var name: String = "name",
-    var text: String = "text",
-    var hostMember: Member = Member("id error placeholder","name error placeholder",false, ""),
-    var editDateText: String = DateFormat.getDateTimeInstance().format(Date())
+    @PrimaryKey(autoGenerate = false) var uid: String = "0",
+    var name: String = "",
+    var text: String = "",
+    @Ignore var hostMember: Member = Member("id error placeholder","name error placeholder",false, ""),
 ){
-    @set:Exclude @get:Exclude var isHost: Boolean = false
     var editTime = System.currentTimeMillis()
-    var members = mapOf(hostMember.userId to hostMember)
+
+    @get:Exclude @get:Ignore val editDateText: String get() = DateFormat.getDateTimeInstance().format(Date(editTime))
+    @set:Exclude @get:Exclude @Ignore var isHost: Boolean = false
+    @Ignore var members = mapOf(hostMember.userId to hostMember)
 
     fun updateDate(){
-        editDateText = DateFormat.getDateTimeInstance().format(Date())
         editTime = System.currentTimeMillis()
     }
     fun textEquals(other: Any?): Boolean{

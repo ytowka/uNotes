@@ -37,17 +37,20 @@ class EditFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         noteId = args.noteId
-        setupFields(mainViewModel.database.notes[noteId] ?: Note()) //TODO: handle error
 
-
-        editor = mainViewModel.database.getNoteEditor(args.noteId,object : NoteUpdatingCallback {
+        editor = mainViewModel.database.getNoteEditor(args.noteId)
+        editor.getterUpdatesApi = object : NoteUpdatingCallback {
             override fun onTextChanged(text: String) {
                 binding.textEdittext.setText(text)
             }
             override fun onNameChanged(name: String) {
                 binding.nameEdittext.setText(name)
             }
-        })
+        }
+        editor.getNote().observe(viewLifecycleOwner){
+            setupFields(it ?: Note())
+        }
+
         editor.getNote().observe(viewLifecycleOwner){
             if(it != null) setupFields(it)
         }
